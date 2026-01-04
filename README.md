@@ -1,117 +1,58 @@
-# SMS-GPT 📩🤖
+# SMS-GPT: AI SMS Bot 🤖📱
 
-A lightweight FastAPI webhook that connects **Twilio SMS** to **Google Gemini (Generative AI)** to create a friendly SMS-based Q&A bot ("Shiksha Bot"). This project is designed for rural education, providing AI-powered answers via basic SMS without requiring internet access on the student's phone.
+**Turn your Android phone into an AI-powered SMS Gateway.**
 
----
+This project bridges a simple Android device with Google's Gemini AI to create a text-based bot (like "Shiksha Bot") that works without internet on the user's end.
 
-## 🔧 Installation & Setup (The `uv` Way)
+## 🏗️ Project Components
 
-This project uses **uv**, an extremely fast Python package manager.
+This repository contains two main parts:
 
-### 1. Install `uv`
+### 1. [Flask API Backend](./flask-api/README.md) 🧠
+- **What it is**: A Python FastAPI server that talks to the Google Gemini AI.
+- **Role**: Receives the SMS text, asks the AI for an answer, and returns the response.
+- **Location**: `/flask-api`
 
-On your Ubuntu machine, run the following to install `uv` globally:
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-### 2. Initialize and Install Dependencies
-
-Navigate to your project folder and use `uv` to manage your environment:
-
-```bash
-# Initialize the project structure
-uv init --app
-
-# Add required dependencies to pyproject.toml
-uv add fastapi uvicorn python-dotenv twilio google-genai python-multipart
-```
+### 2. [SMS Gateway App](./test-apk/sms_gateway/README.md) 📱
+- **What it is**: An Android application.
+- **Role**: Sits on a phone, catches incoming SMS messages, forwards them to the Flask API, and sends the AI's reply back to the user via SMS.
+- **Location**: `/test-apk/sms_gateway`
+- **Compatibility**: **ANDROID ONLY** (iOS is not supported).
 
 ---
 
-## 💡 Configuration (.env)
+## 🚀 How to Run & Test (The Complete Flow)
 
-Create a file named `.env` in the project root to store your API credentials securely:
+To test the full system using your own number, follow these steps:
 
-```
-GEMINI_API_KEY=your_actual_gemini_api_key
-```
+### Step 1: Start the Backend (Brain)
+1.  Go to the `flask-api` folder.
+2.  Install dependencies and start the server (see [Backend Instructions](./flask-api/README.md)).
+3.  Run `ngrok http 8000` to get a public URL (e.g., `https://abcd.ngrok-free.app`).
 
----
+### Step 2: Set up the Gateway (Ears & Mouth)
+1.  **Get the APK**: Download the Android App from this repo:
+    👉 `test-apk/sms_gateway/build/app/outputs/flutter-apk/app-debug.apk`
+2.  Install it on an **Android Phone** (Phone A).
+3.  Open the app and grant **all permissions**.
+4.  In the **Webhook URL** field, paste your ngrok URL + `/sms` (e.g., `https://abcd.ngrok-free.app/sms`).
+5.  Turn **ON** the "Start Service" switch.
 
-## 🚀 Running the Server
-
-Start your FastAPI application using `uv`. This runs the script inside a managed virtual environment:
-
-```bash
-uv run main.py
-```
-
----
-
-## 🌐 Exposing with ngrok
-
-Twilio needs a public URL to send SMS data to your laptop. Use ngrok to create this tunnel:
-
-1. **Start ngrok:**
-
-```bash
-ngrok http 8000
-```
-
-2. **Copy the Forwarding URL:**
-   - (e.g., `https://abcd-1234.ngrok-free.app`)
-
-3. **Configure Twilio Webhook:**
-   - Go to **Twilio Console > Phone Numbers > Active Numbers**
-   - Under **Messaging**, set "A Message Comes In" to **Webhook**
-   - Paste your ngrok URL and **MUST ADD `/sms` at the end**
-   - Example URL: `https://abcd-1234.ngrok-free.app/sms`
-   - Set the method to **HTTP POST** and click **Save**
+### Step 3: Test It!
+1.  Take a **SECOND Phone** (Phone B).
+2.  Send an SMS to **Phone A's number**.
+    - *Example*: "What is the capital of India?"
+3.  **Watch the magic**:
+    - Phone A receives the SMS.
+    - Phone A forwards it to your Laptop (Flask API).
+    - AI generates an answer.
+    - Phone A automatically sends the reply back to Phone B.
 
 ---
 
-## ⚠️ Twilio Trial Restrictions (Critical)
+## ⚠️ Important Notes
 
-If you are using a **Twilio Trial Account**, you will face specific limitations:
+- **Android Only**: The customized APK will only work on Android devices.
+- **Battery Optimization**: You MUST disable battery optimization for the SMS Gateway app on your Android phone, or the operating system will kill the background service.
 
-- **The Problem:** You can only send/receive SMS with numbers that are **Verified Caller IDs**
-- **The Symptom:** If you text from an unverified number, your terminal will show the message arrived and the AI will generate a response, but Twilio will not deliver the SMS to the phone
-- **The Fix:** Go to **Twilio Console > Phone Numbers > Manage > Verified Caller IDs** and add every phone number you plan to test with
-
----
-
-## 🛠️ Testing & Debugging
-
-### 1. Terminal Test (curl)
-
-Test your server logic without using Twilio credits:
-
-```bash
-curl -X POST http://localhost:8000/sms -d "Body=Hi" -d "From=+919876543210"
-```
-
-### 2. The ngrok Dashboard (Port 4040)
-
-Monitor real-time traffic between Twilio and your laptop:
-
-- Open `http://localhost:4040` in your browser
-- If you see a **500 error**, check your Python terminal for a **Traceback**
-- If you see a **404 error**, ensure you added `/sms` to your Twilio Webhook URL
-
----
-
-## 📄 Summary of Flow
-
-1. User texts the Twilio Number
-2. Twilio sends a POST request to your `ngrok-url/sms`
-3. FastAPI processes the message and gets a response from Gemini
-4. FastAPI returns a TwiML XML response (`application/xml`)
-5. Twilio sends that response back to the user as an SMS
-
----
-
-## 📝 License
-
-This project is open source and available for educational purposes.
+For detailed development instructions, please refer to the specific README in each folder.
