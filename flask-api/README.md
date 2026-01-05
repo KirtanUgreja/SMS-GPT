@@ -5,15 +5,15 @@ This directory contains the **FastAPI** backend for SMS-GPT. It acts as the brid
 ## 📁 What's Inside?
 
 - **`main.py`**: The core application logic. It handles the web server and Twilio webhooks.
-- **`model.py`**: Contains the logic for interacting with the Google Gemini API. It handles model selection and fallback mechanisms.
-- **`.env`**: Stores your `GEMINI_API_KEY`.
+- **`model.py`**: Connects to OpenRouter.ai to access various LLMs (default: `xiaomi/mimo-v2-flash:free`).
+- **`.env`**: Stores your `OPENROUTER_API_KEY`.
 - **`manifest.json` / `Procfile`**: (Optional) Configuration for deployments.
 
 ## 🛠️ Prerequisites
 
 - Python 3.10+
-- A Google Cloud Project with the **Gemini API** enabled.
-- An API Key for Gemini.
+- A Google Cloud Project (Optional, if using Gemini directly) OR an **OpenRouter Account**.
+- An API Key from [OpenRouter](https://openrouter.ai/).
 
 ## 📦 Installation & Setup
 
@@ -29,7 +29,7 @@ We recommend using `uv` for a fast setup, but `pip` works too.
     ```bash
     uv run main.py
     ```
-    This automatically installs dependencies (`fastapi`, `uvicorn`, `twilio`, `google-genai`, etc.) and starts the server.
+    This automatically installs dependencies (`fastapi`, `uvicorn`, `twilio`, `requests`, etc.) and starts the server.
 
 ### Option 2: Using standard `pip`
 
@@ -40,7 +40,7 @@ We recommend using `uv` for a fast setup, but `pip` works too.
     ```
 2.  **Install dependencies**:
     ```bash
-    pip install fastapi uvicorn python-dotenv twilio google-genai python-multipart
+    pip install fastapi uvicorn python-dotenv twilio requests python-multipart
     ```
 3.  **Run the server**:
     ```bash
@@ -52,7 +52,7 @@ We recommend using `uv` for a fast setup, but `pip` works too.
 Create a `.env` file in this directory:
 
 ```env
-GEMINI_API_KEY=your_actual_gemini_api_key
+OPENROUTER_API_KEY=your_actual_openrouter_api_key
 ```
 
 ## 🌐 Exposing to the Internet
