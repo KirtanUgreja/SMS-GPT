@@ -4,7 +4,8 @@ This directory contains the **FastAPI** backend for SMS-GPT. It acts as the brid
 
 ## 📁 What's Inside?
 
-- **`main.py`**: The core application logic. It receives SMS webhooks, sends the text to Gemini, and returns the AI's answer in TwiML (XML) format.
+- **`main.py`**: The core application logic. It handles the web server and Twilio webhooks.
+- **`model.py`**: Contains the logic for interacting with the Google Gemini API. It handles model selection and fallback mechanisms.
 - **`.env`**: Stores your `GEMINI_API_KEY`.
 - **`manifest.json` / `Procfile`**: (Optional) Configuration for deployments.
 
