@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from fastapi import FastAPI, Form, Response
 from twilio.twiml.messaging_response import MessagingResponse
 from model import get_ai_response
@@ -20,8 +21,4 @@ async def handle_sms(Body: str = Form(...), From: str = Form(...)):
         content=str(twiml_resp), 
         media_type="application/xml" 
     )
-
-if __name__ == "__main__":
-    import uvicorn
-    # 0.0.0.0 is necessary for ngrok to tunnel to your Ubuntu machine
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# 0.0.0.0 is necessary for ngrok to tunnel to your Ubuntu machine
