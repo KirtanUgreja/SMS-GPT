@@ -36,15 +36,18 @@ We recommend using `uv` for a fast setup, but `pip` works too.
 1.  **Create a virtual environment**:
     ```bash
     python -m venv .venv
+    ```
+2.  **Activate the virtual environment**:
+    ```bash
     source .venv/bin/activate
     ```
-2.  **Install dependencies**:
+3.  **Install dependencies**:
     ```bash
-    pip install fastapi uvicorn python-dotenv twilio requests python-multipart
+    pip install -r requirements.txt
     ```
-3.  **Run the server**:
+4.  **Run the server**:
     ```bash
-    python main.py
+    uvicorn main:app --reload --host 0.0.0.0 --port 8000
     ```
 
 ## 🔑 Configuration
