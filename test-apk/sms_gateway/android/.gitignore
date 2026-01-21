@@ -7,3 +7,8 @@
 /captures
 .cxx
 local.properties
+
+# Keystore files (security sensitive)
+keystore.properties
+*.jks
+*.keystore

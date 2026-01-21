@@ -7,10 +7,12 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "sms_gateway/foreground_service"
+    private val SMS_CHANNEL = "sms_gateway/sms_sender"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         
+        // Foreground service channel
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "startService" -> {
@@ -29,6 +31,10 @@ class MainActivity: FlutterActivity() {
                 }
             }
         }
+        
+        // SMS sender channel (direct Android API)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SMS_CHANNEL)
+            .setMethodCallHandler(SmsSenderHandler())
     }
 
     private fun startForegroundService() {
