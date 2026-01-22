@@ -2,14 +2,14 @@
 
 **Turn your Android phone into an AI-powered SMS Gateway.**
 
-This project bridges a simple Android device with Google's Gemini AI to create a text-based bot (like "Shiksha Bot") that works without internet on the user's end.
+This project bridges a simple Android device with Open Router to create a text-based bot (like "Shiksha Bot") that works without internet on the user's end.
 
 ## 🏗️ Project Components
 
 This repository contains two main parts:
 
 ### 1. [Flask API Backend](./flask-api/README.md) 🧠
-- **What it is**: A Python FastAPI server that talks to the Google Gemini AI.
+- **What it is**: A Python FastAPI server that talks to the Open Router.
 - **Role**: Receives the SMS text, asks the AI for an answer, and returns the response.
 - **Location**: `/flask-api`
 
